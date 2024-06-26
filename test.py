@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 # %%
 
 # load data
-paths = [r'C:\Users\jl5675\Desktop\Noah\github\code\patch_analysis\data\data_cell1-I.csv', r'C:\Users\jl5675\Desktop\Noah\github\code\patch_analysis\data\data_cell1-V.csv']
+paths = [r'C:\Users\jl5675\Desktop\Noah\github\patch_analysis\data\data_cell1-I.csv', r'C:\Users\jl5675\Desktop\Noah\github\patch_analysis\data\data_cell1-V.csv']
 
 data_current = pd.read_csv(paths[0], skiprows=5, index_col=False, header=None)
 data_voltage = pd.read_csv(paths[1], skiprows=5, index_col=False, header=None)
