@@ -60,15 +60,17 @@ def time_plot(data_voltage: pd.DataFrame, data_current: pd.DataFrame, metadata: 
 
     # First subplot
     ax1.plot(x_axis_long, data_long_V, color='b', linestyle='-')
-    ax1.set_title(title)
+    ax1.set_title('Recorded Voltage')
     ax1.set_ylabel('Voltage (mV)')
     ax1.grid(True)
 
     # Second subplot
     ax2.plot(x_axis_long, data_long_I, color='r', linestyle='--')
-    ax2.set_title(title)
+    ax2.set_title('Injected Current')
     ax2.set_xlabel('Time (ms)')
     ax2.set_ylabel('Current (pA)')
     ax2.grid(True)
+
+    fig_long.suptitle(title)
 
     plt.show()
