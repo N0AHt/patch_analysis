@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import patch_utils as patch
 import seaborn as sms
 
-
 datafile_voltage = r'C:\Users\jl5675\Desktop\Noah\data\patch2\rec1_cell1-V.csv'
 datafile_current = r'C:\Users\jl5675\Desktop\Noah\data\patch2\rec1_cell1-I.csv'
 #
@@ -24,12 +23,11 @@ x_axis = np.linspace(0, (num_points / resolution), num_points)
 # multi plot
 multiplot = plt.figure(figsize=(10, 6))
 for i in range(len(data_V)):
-
     plot_data = data_V.iloc[i].tolist()
     plt.plot(x_axis, plot_data, linestyle='-')
 
 # Add titles and labels
-#for these cells, day 0 was august 12th
+# for these cells, day 0 was August 12th
 plt.title('Current Clamp Recording - DIV 16')
 plt.xlabel('Time (ms)')
 plt.ylabel('Voltage (mV)')
@@ -47,8 +45,7 @@ plt.show()
 # Concatenate all lists into one long list
 data_long_V = data_V.values.flatten()
 data_long_I = data_I.values.flatten()
-x_axis_long = np.linspace(0, len(data_long_V)/resolution, len(data_long_V))
-
+x_axis_long = np.linspace(0, len(data_long_V) / resolution, len(data_long_V))
 
 fig_long, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 6), sharex=True)
 
@@ -66,7 +63,3 @@ ax2.set_ylabel('Current (pA)')
 ax2.grid(True)
 
 plt.show()
-
-
-
-
