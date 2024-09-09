@@ -80,6 +80,4 @@ def make_dataset_dataframe(path_to_folder: str) -> pd.DataFrame:
     df_list = [ make_patch_dataframe(filedict[key][1], filedict[key][0] ) for key in filedict.keys() ]
     dataset = pd.concat(df_list, axis=1)
 
-
-
     return dataset
