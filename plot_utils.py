@@ -21,13 +21,12 @@ def multiplot(data: pd.DataFrame, metadata: pd.DataFrame, title: str) -> None:
     x_axis = np.linspace(0, (num_points / resolution), num_points)
 
     # multi plot
-    fig = plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(10, 6))
     for i in range(len(data)):
         plot_data = data.iloc[i].tolist()
         plt.plot(x_axis, plot_data, linestyle='-')
 
     # Add titles and labels
-    # for these cells, day 0 was August 12th
     plt.title(title)
     plt.xlabel('Time (ms)')
     plt.ylabel('Voltage (mV)')
@@ -37,6 +36,7 @@ def multiplot(data: pd.DataFrame, metadata: pd.DataFrame, title: str) -> None:
 
     # Display the plot
     plt.show()
+
 
 def time_plot(data_voltage: pd.DataFrame, data_current: pd.DataFrame, metadata: pd.DataFrame, title: str = None) -> None:
     '''

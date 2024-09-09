@@ -64,6 +64,8 @@ def make_dataset_dataframe(path_to_folder: str) -> pd.DataFrame:
     """
 
     files = os.listdir(path_to_folder)  # return a list of files in the folder
+    files = [os.path.abspath(os.path.join(path_to_folder, file)) for file in files]
+
 
     # cool hashmap method for organising the files! leetcode ;)
     filedict = dict()
@@ -74,7 +76,8 @@ def make_dataset_dataframe(path_to_folder: str) -> pd.DataFrame:
         else:
             filedict[file_title] = [file]
 
-    df_list = [ make_patch_dataframe(filedict[key][0], filedict[key][1] ) for key in filedict.keys() ]
+# TODO: make sure that current and voltage files are in the correct order! this is really un robust atm. Uses location in the dictionary!
+    df_list = [ make_patch_dataframe(filedict[key][1], filedict[key][0] ) for key in filedict.keys() ]
     dataset = pd.concat(df_list, axis=1)
 
 
