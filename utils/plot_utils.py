@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-def multiplot(data: pd.DataFrame, metadata: pd.DataFrame, title: str) -> None:
+def multiplot(data: pd.DataFrame, metadata: pd.DataFrame, title: str, show: bool = True) -> None:
     '''
     This function plots patch data recorded via jesus' labview program that has been processed by the
     extract_data_and_metadata() function in patch utils
@@ -35,10 +35,11 @@ def multiplot(data: pd.DataFrame, metadata: pd.DataFrame, title: str) -> None:
     plt.grid(True)
 
     # Display the plot
-    plt.show()
+    if show:
+        plt.show()
 
 
-def time_plot(data_voltage: pd.DataFrame, data_current: pd.DataFrame, metadata: pd.DataFrame, title: str = None) -> None:
+def time_plot(data_voltage: pd.DataFrame, data_current: pd.DataFrame, metadata: pd.DataFrame, title: str = None, show: bool = True) -> None:
     '''
     plot all data and voltage recordings over time in a recording
 
@@ -73,4 +74,5 @@ def time_plot(data_voltage: pd.DataFrame, data_current: pd.DataFrame, metadata: 
 
     fig_long.suptitle(title)
 
-    plt.show()
+    if show:
+        plt.show()

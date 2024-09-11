@@ -32,10 +32,17 @@ def extract_data_and_metadata(csv_file_path: str) -> tuple[pd.DataFrame, pd.Data
 # all collected and grouped by stimulation
 
 
-def make_patch_dataframe(path_to_voltage_csv: str, path_to_current_csv: str) -> pd.DataFrame:
+def make_patch_dataframe(path_to_voltage_csv: str, path_to_current_csv: str, path_to_stimulation_csv: str = None) -> pd.DataFrame:
+    
     dataV_array, metaV_array = extract_data_and_metadata(path_to_voltage_csv)
     dataI_array, _ = extract_data_and_metadata(path_to_current_csv)
     # it is assumed that the metadata for the voltage and current recordings are the same
+
+    if path_to_stimulation_csv:
+        data_aux, _ = extract_data_and_metadata(path_to_stimulation_csv)
+        data_aux.loc[data_aux.index[-1] + 1] = [0] * len(data_aux.columns)
+    else:
+        data_aux = None
 
     # extract better metadata from the files
 
@@ -46,9 +53,10 @@ def make_patch_dataframe(path_to_voltage_csv: str, path_to_current_csv: str) -> 
 
     recording_name = os.path.basename(path_to_voltage_csv).split(".")[0].split('-')[0]
 
-    row_names = ['date', 'paths', 'metadata', 'voltage', 'current']
+
+    row_names = ['date', 'paths', 'metadata', 'voltage', 'current', 'stimulation']
     dataframe = pd.DataFrame({recording_name: [date, [path_to_voltage_csv, path_to_current_csv], metaV_array,
-                                               dataV_array, dataI_array]}, index=row_names, dtype='object')
+                                               dataV_array, dataI_array, data_aux]}, index=row_names, dtype='object')
 
     return dataframe
 
@@ -77,7 +85,8 @@ def make_dataset_dataframe(path_to_folder: str) -> pd.DataFrame:
             filedict[file_title] = [file]
 
 # TODO: make sure that current and voltage files are in the correct order! this is really un robust atm. Uses location in the dictionary!
-    df_list = [ make_patch_dataframe(filedict[key][1], filedict[key][0] ) for key in filedict.keys() ]
+    df_list = [ make_patch_dataframe(path_to_voltage_csv = filedict[key][2], path_to_current_csv = filedict[key][0], 
+                                     path_to_stimulation_csv = filedict[key][1]) for key in filedict.keys() ]
     dataset = pd.concat(df_list, axis=1)
 
     return dataset

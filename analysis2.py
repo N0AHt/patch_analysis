@@ -19,8 +19,10 @@ title = 'DIV 16; ' + rec_name + '; ' + date
 
 # %%
 
-p_plot.multiplot(patchdata.loc['voltage', rec_name], patchdata.loc['metadata', rec_name], title)
+p_plot.multiplot(patchdata.loc['voltage', rec_name], patchdata.loc['metadata', rec_name], title, show = False)
 
 # %%
 
-p_plot.time_plot(patchdata.loc['voltage', rec_name], patchdata.loc['current', rec_name], patchdata.loc['metadata', rec_name], title)
+p_plot.time_plot(patchdata.loc['voltage', rec_name], patchdata.loc['current', rec_name], patchdata.loc['metadata', rec_name], title, show = False)
+
+plt.show()
