@@ -3,6 +3,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 
 def multiplot(data: pd.DataFrame, metadata: pd.DataFrame, title: str, show: bool = True) -> None:
     '''
@@ -76,3 +77,99 @@ def time_plot(data_voltage: pd.DataFrame, data_current: pd.DataFrame, metadata: 
 
     if show:
         plt.show()
+
+
+def stim_plot(data_voltage, data_stim, metadata, title):
+
+    num_points = int(metadata.num_points.value)
+    resolution = int(metadata.resolution.value)
+    x_axis = np.linspace(0, (num_points / resolution), num_points)
+
+    crosses = find_threshold_crosses(data_stim)
+
+    # multi plot
+    plt.figure(figsize=(10, 6))
+    for i in range(len(data_voltage)):
+        plot_data = data_voltage.iloc[i].tolist()
+        plt.plot(x_axis, plot_data, linestyle='-')
+
+    # add colour when stimulation is applied
+    for cross in crosses:
+        print(cross)
+        plt.axvspan(data_voltage.index[cross[0]], data_voltage.index[cross[1]], color='r', alpha=0.4, lw=0)
+
+    # Add titles and labels
+    plt.title(title)
+    plt.xlabel('Time (ms)')
+    plt.ylabel('Voltage (mV)')
+
+    # Show grid
+    plt.grid(True)
+
+    plt.show()
+
+
+def time_plot_stim(data_voltage: pd.DataFrame, data_stimulation: pd.DataFrame, metadata: pd.DataFrame, title: str = None, show: bool = True) -> None:
+
+    '''
+    plot all voltage recordings over time in a recording with overlay of stimulation application
+
+    :param data_voltage:
+    :param data_stimulation:
+    :param metadata:
+    :return:
+    '''
+
+    volts = data_voltage.values.flatten()
+    stims = data_stimulation
+
+    resolution = int(metadata.resolution.value)
+    x_axis = np.linspace(0, len(volts) / resolution, len(volts))
+
+    crosses = find_threshold_crosses(stims)
+
+    plt.figure(figsize=(10, 6))
+
+    plt.plot(x_axis, volts)
+    for cross in crosses:
+        plt.axvspan(cross[0]/resolution, cross[1]/resolution, color = 'r', alpha=0.2, lw=0, label = 'Stimulation Applied')
+
+    plt.title(title)
+    plt.xlabel('Time (ms)')
+    plt.ylabel('Voltage (mV)')
+
+    plt.legend
+
+    plt.grid(True)
+
+    plt.show()
+
+
+
+def find_threshold_crosses(data_stim):
+    #find on/off stim points
+    stim = data_stim.values.flatten()
+    threshold = stim.max()/2
+
+    indices_positive = np.where((stim[:-1] < threshold) & (stim[1:] >= threshold))[0] + 1 # genius move from chatGPT 
+    indices_negative = np.where((stim[:-1] > threshold) & (stim[1:] <= threshold))[0] + 1
+
+    '''
+    array[:-1]: This slices the array from the start up to, but not including, the last element. Essentially, it excludes the last element. For example, if array = [1, 3, 2, 5], then array[:-1] results in [1, 3, 2].
+
+    array[1:]: This slices the array starting from the second element to the end. For example, if array = [1, 3, 2, 5], then array[1:] results in [3, 2, 5].
+
+    By comparing these slices:
+
+    array[:-1] < threshold: Checks if each element in array up to the second-to-last is less than the threshold.
+    array[1:] >= threshold: Checks if each element in array starting from the second element is greater than or equal to the threshold.
+    The boolean expression (array[:-1] < threshold) & (array[1:] >= threshold) evaluates to True where the value crosses the threshold from below to above.
+    '''
+
+    # combined_indices = np.concatenate((indices_positive, indices_negative))
+    # # Sort the combined indices
+    # combined_indices_sorted = np.sort(combined_indices)
+
+    combined_indices = zip(indices_positive, indices_negative)
+
+    return list(combined_indices)
