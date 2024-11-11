@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "../../data/tere_sept"
+		},
+		{
+			"path": "../../data/npatch/noah"
 		}
 	],
 	"settings": {}

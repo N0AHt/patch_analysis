@@ -19,4 +19,4 @@ fig = px.scatter(df,
                  labels={"x": "X Axis", "y": "Y Axis"})
 
 # Show the plot
-fig.show()
+fig.write_html('first_figure.html', auto_open=True) # https://stackoverflow.com/questions/68924471/plotly-express-doesnt-load-and-refuse-to-connect

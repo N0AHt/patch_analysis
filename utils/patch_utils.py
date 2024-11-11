@@ -61,7 +61,7 @@ def make_patch_dataframe(path_to_voltage_csv: str, path_to_current_csv: str, pat
     return dataframe
 
 
-def make_dataset_dataframe(path_to_folder: str) -> pd.DataFrame:
+def make_dataset_dataframe(path_to_folder: str, stim: bool = False) -> pd.DataFrame:
     """
     Make a dataframe containing multiple recordings from a single cell. Takes a folder of recordings and turns it into
     a dataframe with columns=recording, rows=attributes/data from that recording.
@@ -84,9 +84,15 @@ def make_dataset_dataframe(path_to_folder: str) -> pd.DataFrame:
         else:
             filedict[file_title] = [file]
 
-# TODO: make sure that current and voltage files are in the correct order! this is really un robust atm. Uses location in the dictionary!
-    df_list = [ make_patch_dataframe(path_to_voltage_csv = filedict[key][2], path_to_current_csv = filedict[key][0], 
-                                     path_to_stimulation_csv = filedict[key][1]) for key in filedict.keys() ]
-    dataset = pd.concat(df_list, axis=1)
+    if stim:
+    # TODO: make sure that current and voltage files are in the correct order! this is really un robust atm. Uses location in the dictionary!
+        df_list = [ make_patch_dataframe(path_to_voltage_csv = filedict[key][2], path_to_current_csv = filedict[key][0], 
+                                        path_to_stimulation_csv = filedict[key][1]) for key in filedict.keys() ]
+        dataset = pd.concat(df_list, axis=1)
 
-    return dataset
+        return dataset
+    else:
+        df_list = [ make_patch_dataframe(path_to_voltage_csv = filedict[key][1], path_to_current_csv = filedict[key][0]) for key in filedict.keys() ]
+        dataset = pd.concat(df_list, axis=1)
+
+        return dataset
