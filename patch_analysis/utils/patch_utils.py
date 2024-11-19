@@ -75,10 +75,19 @@ def make_dataset_dataframe(path_to_folder: str, stim: bool = False) -> pd.DataFr
     files = [os.path.abspath(os.path.join(path_to_folder, file)) for file in files]
 
 
-    # cool hashmap method for organising the files! leetcode ;)
+    # hashmap method for organizing the files! this was a leetcode problem ;)
     filedict = dict()
     for file in files:
+
+        # check if file name is a file (vs a folder). If it isn't a file, skip it
+        if not os.path.isfile(file):
+            print('ignored folder: ', file)
+            continue
+
+        # each recording has a voltage and a current recording. Some also have a stimulation recording.
         file_title = (os.path.basename(file).split(".")[0].split('-')[0])
+        
+        # build file dictionary (dictionary of dictionaries)
         if file_title in filedict:
             filedict[file_title].append(file)
         else:
