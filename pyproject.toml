@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "patch_analysis"
+version = "0.1"
+description = "Code for analysing and processing patch clamp data"
+readme = "README.md"
+requires-python = ">=3.12"
+
+authors = [
+    { name = "Noah Telerman", email = "nrt2124@columbia.edu" }
+]
+
+# dependencies = [
+#     "numpy",
+# ]
+
+
+[project.urls]
+repository = "https://github.com/N0AHt/patch_analysis"
+
+
+[tool.setuptools.packages.find]
+include = ['patch_analysis']
