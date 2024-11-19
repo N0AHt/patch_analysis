@@ -61,47 +61,54 @@ def make_patch_dataframe(path_to_voltage_csv: str, path_to_current_csv: str, pat
     return dataframe
 
 
-def make_dataset_dataframe(path_to_folder: str, stim: bool = False) -> pd.DataFrame:
+def make_dataset_dataframe( path_to_folder: str, stim: bool = False
+                           , recording_types: dict = {'voltage' : 'V', 'current' : 'I', 'stimulation' : 'LED'} ) -> pd.DataFrame:
     """
     Make a dataframe containing multiple recordings from a single cell. Takes a folder of recordings and turns it into
     a dataframe with columns=recording, rows=attributes/data from that recording.
 
 
     :param path_to_folder: path to a folder of data
+    :param stim: Bool. If this experiment contains stimulation recordings in addition to V and I
+    :param file_types: A dictionary containing information on the file path naming conventions for the different types of
+        recordings (V, I, and Stim). E.g. in some recordings stimulation is named LED 'rec1_cell_1-LED.csv' for optical stimulation.
+        Leave stim blank if not used.
+
     :return: a pandas dataframe for all recordings from one cell/from one folder
     """
 
-    files = os.listdir(path_to_folder)  # return a list of files in the folder
-    files = [os.path.abspath(os.path.join(path_to_folder, file)) for file in files]
-
+    # return a list of files in the folder
+    files = os.listdir(path_to_folder)
 
     # hashmap method for organizing the files! this was a leetcode problem ;)
     filedict = dict()
     for file in files:
+        
+        file_path = os.path.abspath(os.path.join(path_to_folder, file))
 
         # check if file name is a file (vs a folder). If it isn't a file, skip it
-        if not os.path.isfile(file):
+        if not os.path.isfile(file_path):
             print('ignored folder: ', file)
             continue
 
         # each recording has a voltage and a current recording. Some also have a stimulation recording.
         file_title = (os.path.basename(file).split(".")[0].split('-')[0])
-        
-        # build file dictionary (dictionary of dictionaries)
+        recording_type = (os.path.basename(file).split(".")[0].split('-')[1])
+
+         # build file dictionary (dictionary of dictionaries)
         if file_title in filedict:
-            filedict[file_title].append(file)
+            filedict[file_title][recording_type] = file_path
         else:
-            filedict[file_title] = [file]
+            filedict[file_title] = {recording_type : file_path}
 
     if stim:
-    # TODO: make sure that current and voltage files are in the correct order! this is really un robust atm. Uses location in the dictionary!
-        df_list = [ make_patch_dataframe(path_to_voltage_csv = filedict[key][2], path_to_current_csv = filedict[key][0], 
-                                        path_to_stimulation_csv = filedict[key][1]) for key in filedict.keys() ]
+        df_list = [ make_patch_dataframe(path_to_voltage_csv = filedict[key][recording_types['voltage']], path_to_current_csv = filedict[key][recording_types['current']], 
+                                        path_to_stimulation_csv = filedict[key][recording_types['stimulation']]) for key in filedict.keys() ]
         dataset = pd.concat(df_list, axis=1)
 
         return dataset
     else:
-        df_list = [ make_patch_dataframe(path_to_voltage_csv = filedict[key][1], path_to_current_csv = filedict[key][0]) for key in filedict.keys() ]
+        df_list = [ make_patch_dataframe(path_to_voltage_csv = filedict[key][recording_types['voltage']], path_to_current_csv = filedict[key][recording_types['current']]) for key in filedict.keys() ]
         dataset = pd.concat(df_list, axis=1)
 
         return dataset
