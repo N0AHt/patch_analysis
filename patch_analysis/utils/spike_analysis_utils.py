@@ -39,7 +39,7 @@ def find_current_injection(peaks, current_trace):
         default_current = current_array[0]
         current_injection = current_at_peak - default_current
     else:
-        current_injection = np.NaN
+        current_injection = np.nan
 
     return current_injection
 
