@@ -20,8 +20,15 @@ $ cd <repo>
 Create a new mamba environment and install python
 
 ```bash
-$ mamba create -n patch_analysis python, ipykernel # env will be called patch_analysis. Add ipykernel if using jupyter notebooks
+$ mamba create -n patch_analysis python # env will be called patch_analysis.
 $ mamba activate patch_analysis
+```
+
+If you plan to use jupyter notebooks:
+
+```bash
+$ mamba install ipykernel, Pyside6 #pyside6 allows interactive plots in vscode's jupyter notebook implementation.
+$ python -m ipykernel install --user --name patch_analysis --display-name "Python (patch_analysis)" # makes the kernel discoverable by VScode
 ```
 
 Install the package and requirements
@@ -34,3 +41,5 @@ $ pip install -r requirements.txt
 ---
 
 ## Usage
+
+The [notebooks](notebooks) folder provides some minimal examples of using the package to analyze patch clamp data
