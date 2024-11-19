@@ -144,13 +144,13 @@ def time_plot_stim(data_voltage: pd.DataFrame, data_stimulation: pd.DataFrame, m
     plt.show()
 
 
-
+# utility for stim plots. May be useful for other things too. If so will move into patch_utils
 def find_threshold_crosses(data_stim):
     #find on/off stim points
     stim = data_stim.values.flatten()
     threshold = stim.max()/2
 
-    indices_positive = np.where((stim[:-1] < threshold) & (stim[1:] >= threshold))[0] + 1 # genius move from chatGPT 
+    indices_positive = np.where((stim[:-1] < threshold) & (stim[1:] >= threshold))[0] + 1 # From chatGPT 
     indices_negative = np.where((stim[:-1] > threshold) & (stim[1:] <= threshold))[0] + 1
 
     '''
