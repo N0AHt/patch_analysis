@@ -93,7 +93,7 @@ def make_dataset_dataframe( path_to_folder: str, stim: bool = False
 
         # each recording has a voltage and a current recording. Some also have a stimulation recording.
         file_title = (os.path.basename(file).split(".")[0].split('-')[0])
-        recording_type = (os.path.basename(file).split(".")[0].split('-')[1])
+        recording_type = (os.path.basename(file).split(".")[0].split('-')[-1])
 
          # build file dictionary (dictionary of dictionaries)
         if file_title in filedict:
